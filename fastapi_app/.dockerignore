@@ -1,0 +1,6 @@
+__pycache__
+*.pyc
+.vscode/
+full_archive/
+mlruns/
+useful_dataset/
