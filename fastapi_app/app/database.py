@@ -2,10 +2,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
+env_path = Path(__file__).resolve().parents[2] / '.env'
+load_dotenv(dotenv_path=env_path)
+
+POSTGRES_USER = os.getenv("fPOSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("fPOSTGRES_PASSWORD")
+POSTGRES_DB = os.getenv("fPOSTGRES_DB")
 POSTGRES_HOST_PORT = os.getenv("POSTGRES_HOST_PORT", "localhost:5432")
 
 DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST_PORT}/{POSTGRES_DB}"

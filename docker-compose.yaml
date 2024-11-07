@@ -8,7 +8,7 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${aPOSTGRES_USER}:${aPOSTGRES_PASSWORD}@${POSTGRES_HOST_PORT}/${aPOSTGRES_DB}
     AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW__CORE__FERNET_KEY}
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
@@ -27,6 +27,7 @@ x-airflow-common:
       condition: service_healthy
 
 services:
+  
   postgres:
     image: postgres:13
     env_file:
@@ -36,6 +37,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
+      -  ${AIRFLOW_PROJ_DIR:-.}/init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
       - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
@@ -45,6 +47,19 @@ services:
     restart: always
     ports:
       - "5432:5432"
+
+    
+  fastapi:
+    image: fastapi
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: /bin/sh -c "sleep 10 && alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+
 
   airflow-webserver:
     <<: *airflow-common
@@ -92,7 +107,7 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+        
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
@@ -155,6 +170,7 @@ services:
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}/airflow:/sources
 
+  
   airflow-cli:
     <<: *airflow-common
     profiles:

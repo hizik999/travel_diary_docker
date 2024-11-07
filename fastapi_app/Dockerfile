@@ -5,7 +5,7 @@ FROM python:3.11
 WORKDIR /app
 
 # Устанавливаем numpy и pandas отдельно перед остальными зависимостями
-RUN pip install --no-cache-dir numpy pandas
+RUN pip install --no-cache-dir numpy pandas python-dotenv
 
 # Копируем файл с зависимостями
 COPY app/requirements.txt .

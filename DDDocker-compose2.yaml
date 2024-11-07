@@ -1,10 +1,10 @@
 version: '1'
 
 services:
-  app:
+  fastapi:
     build: 
       context: .
-    image: my_fastapi_app
+    image: fastapi
     ports:
       - "8000:8000"
     env_file:
