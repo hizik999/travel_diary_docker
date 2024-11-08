@@ -46,9 +46,9 @@ def get_motions(db: Session = Depends(get_db)):
     validate(db_motions)
     return db_motions
 
-# @app.put("/motion")
-# def update_motion_label(motion_id: int, label_id: int, db: Session = Depends(get_db)):
-#     return crud.update_motion_label(db=db, motion_id=motion_id, label_id=label_id)
+@app.put("/motion")
+def update_motion_label(motion_id: int, label_id: int, db: Session = Depends(get_db)):
+    return crud.update_motion_label(db=db, motion_id=motion_id, label_id=label_id)
 
 ### функция для валидации существования объекта
 def validate(obj):
