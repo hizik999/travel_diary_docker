@@ -1,8 +1,10 @@
-чтобы перезапустить контейнер и подтянуть новые значения из .env
+чтобы перезапустить контейнер и удалить все данные из бд
 ```bash
 docker-compose down --volumes --remove-orphans
 docker-compose up -d
 ```
+
+## Гайд как запустить приложение
 1. собираю образ fastapi 
 ```bash
 cd fastapi_app
