@@ -7,12 +7,6 @@ WORKDIR /app
 # Устанавливаем numpy и pandas отдельно перед остальными зависимостями
 RUN pip install 'fastapi[all]' python-dotenv psycopg2-binary alembic
 
-# Копируем файл с зависимостями
-COPY app/requirements.txt .
-
-# Устанавливаем остальные зависимости из requirements.txt
-# RUN pip install -r requirements.txt
-
 # Копируем остальные файлы проекта
 COPY . .
 
