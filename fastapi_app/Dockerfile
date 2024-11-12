@@ -1,17 +1,17 @@
-# Используем официальный образ Python
-FROM python:3.11
+# Используем официальный образ Python для архитектуры amd64
+FROM --platform=linux/amd64 python:3.11
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
 # Устанавливаем numpy и pandas отдельно перед остальными зависимостями
-RUN pip install --no-cache-dir numpy pandas python-dotenv
+RUN pip install 'fastapi[all]' python-dotenv psycopg2-binary alembic
 
 # Копируем файл с зависимостями
 COPY app/requirements.txt .
 
 # Устанавливаем остальные зависимости из requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# RUN pip install -r requirements.txt
 
 # Копируем остальные файлы проекта
 COPY . .

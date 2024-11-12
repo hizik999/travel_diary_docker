@@ -51,4 +51,4 @@ fPOSTGRES_PASSWORD=password123
 fPOSTGRES_DB=travel_diary
 
 ```
-_AIRFLOW_WWW_USER_USERNAME и _AIRFLOW_WWW_USER_USERNAME это для входа в веб админку, остальное вроде понятно)
+_AIRFLOW_WWW_USER_USERNAME и _AIRFLOW_WWW_USER_USERNAME это для входа в веб админку, остальное вроде понятно
