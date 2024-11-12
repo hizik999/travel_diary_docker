@@ -5,7 +5,7 @@ FROM --platform=linux/amd64 python:3.11
 WORKDIR /app
 
 # Устанавливаем numpy и pandas отдельно перед остальными зависимостями
-RUN pip install 'fastapi[all]' python-dotenv psycopg2-binary alembic
+RUN pip install 'fastapi[all]' python-dotenv psycopg2-binary alembic starlette
 
 # Копируем остальные файлы проекта
 COPY . .

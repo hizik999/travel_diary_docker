@@ -52,3 +52,17 @@ fPOSTGRES_DB=travel_diary
 
 ```
 _AIRFLOW_WWW_USER_USERNAME и _AIRFLOW_WWW_USER_USERNAME это для входа в веб админку, остальное вроде понятно
+
+
+```
+cd fastapi_app
+docker build -t fastapi .
+cd ..
+docker save -o fastapi.tar fastapi:latest
+scp -r ./ root@ip:/root/af_docker
+```
+дальше в директории af_docker
+```
+docker load -i fastapi.tar
+docker compose up -d
+```

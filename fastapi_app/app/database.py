@@ -15,6 +15,9 @@ POSTGRES_HOST_PORT = os.getenv("POSTGRES_HOST_PORT", "localhost:5432")
 
 DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST_PORT}/{POSTGRES_DB}"
 
+fUSERNAME = os.getenv("fUSERNAME")
+fPASSWORD = os.getenv("fPASSWORD")
+
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

@@ -1,16 +1,37 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from uvicorn import run
-from app.database import get_db
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.openapi.docs import get_swagger_ui_html
+from starlette.responses import RedirectResponse
+from fastapi.openapi.utils import get_openapi
+from app.database import get_db, fUSERNAME, fPASSWORD
 import app.crud as crud
 import app.models as models
-from fastapi.responses import JSONResponse
+import secrets
 
-app = FastAPI()
 
-@app.get("/hello")
-async def hello():
-    return JSONResponse(content={"message": "Hello, world!"})
+
+app = FastAPI(docs_url=None, redoc_url=None) 
+security = HTTPBasic()
+
+# Укажите логин и пароль
+USERNAME = fUSERNAME
+PASSWORD = fPASSWORD
+
+def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = secrets.compare_digest(credentials.username, USERNAME)
+    correct_password = secrets.compare_digest(credentials.password, PASSWORD)
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+
+@app.get("/docs", include_in_schema=False)
+async def get_documentation(credentials: HTTPBasicCredentials = Depends(authenticate)):
+    return get_swagger_ui_html(openapi_url=app.openapi_url, title="Secure API Documentation")
 
 ### Label endpoints
 ### обновление labels
@@ -55,6 +76,20 @@ def validate(obj):
     if obj is None:
         raise HTTPException(status_code=404, detail="Object not found")
 
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Secure API",
+        version="1.0.0",
+        description="This is a secure API with protected documentation",
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
 
 if __name__ == "__main__":
     run("main:app", reload=True)
