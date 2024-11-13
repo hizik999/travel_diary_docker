@@ -28,7 +28,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_labels_id'), 'labels', ['id'], unique=False)
     op.create_table('motions',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('time', sa.Integer(), nullable=False),
+    sa.Column('time', sa.BigInteger(), nullable=False),
     sa.Column('user_imei', sa.String(), nullable=False),
     sa.Column('acceleration_x', sa.Float(), nullable=True),
     sa.Column('acceleration_y', sa.Float(), nullable=True),

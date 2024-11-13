@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Float, Integer, String, ForeignKey
+from sqlalchemy import Column, Float, Integer, String, ForeignKey, BigInteger
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -16,7 +16,7 @@ class MotionSchema(Base):
     __tablename__ = "motions"
 
     id = Column(Integer, primary_key=True, index=True)
-    time = Column(Integer, nullable=False)
+    time = Column(BigInteger, nullable=False)
     user_imei = Column(String, nullable=False)
     acceleration_x = Column(Float, nullable=True)
     acceleration_y = Column(Float, nullable=True)
